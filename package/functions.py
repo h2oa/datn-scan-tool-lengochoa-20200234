@@ -412,10 +412,8 @@ def wordpressCheck(domain, port):
     client.consoles.console(console_id).write(command)
     timeout = 0
     wp_version = ""
-    while True:
+    while timeout < 15:
         timeout += 3
-        if timeout == 15:
-            break
         time.sleep(3)
         result = client.consoles.console(console_id).read()
         if "Auxiliary module execution completed" in result["data"]:
@@ -426,7 +424,7 @@ def wordpressCheck(domain, port):
                 # print(match.group(0))
                 wp_version = match.group(0).split("Wordpress")[1].strip()
                 check = True
-        break
+            break
     client.consoles.console(console_id).destroy()
     destroyCurrentConsole(client)
     if check == True:
