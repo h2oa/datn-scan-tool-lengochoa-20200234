@@ -201,6 +201,7 @@ def getPluginCVE(plugin_name, api_key):
     if response.status_code == 200:
         data = response.json()
         return data
+        # return data.get('vulnerabilities', [])
     else:
         print("Failed to fetch data:", response.status_code)
         return []
@@ -440,12 +441,9 @@ def joomlaCheck(domain, port):
     client.consoles.console(console_id).write(command)
     timeout = 0
     joomla_version = ""
-    while True:
-        timeout += 1
-        if timeout == 10:
-            printRed("Some error occured, please try again!")
-            break
+    while timeout < 10:
         time.sleep(1)
+        timeout += 1
         result = client.consoles.console(console_id).read()
         if "Auxiliary module execution completed" in result["data"]:
             # print(result["data"])
@@ -455,7 +453,6 @@ def joomlaCheck(domain, port):
                 # print(match.group(0))
                 joomla_version = match.group(0).split("Joomla")[1].strip()
                 check = True
-        break
     client.consoles.console(console_id).destroy()
     destroyCurrentConsole(client)
     if check == True:
