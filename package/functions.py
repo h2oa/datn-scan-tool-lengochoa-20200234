@@ -201,7 +201,7 @@ def getPluginCVE(plugin_name, api_key):
     if response.status_code == 200:
         data = response.json()
         return data
-        return data.get('vulnerabilities', [])
+        # return data.get('vulnerabilities', [])
     else:
         print("Failed to fetch data:", response.status_code)
         return []
